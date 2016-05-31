@@ -302,7 +302,7 @@ function man-preview() {
   man -t "$@" | open -f -a Preview
 }
 
-function pushit()
+function push()
 {
   git push -u origin `br`
 }
