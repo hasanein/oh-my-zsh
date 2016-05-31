@@ -1,7 +1,3 @@
-# Include aliases file created by the marker script
-if [ -f ~/.marker_functions ] ; then	
-	source ~/.marker_functions
-fi
 
 # #####################################################################################################################################################
 # # 							                       SCRIPTS INCLUDE SECTION                 		            									 ##
@@ -24,7 +20,7 @@ ssh-add > /dev/null 2>&1
 
 OPT_BINARIES=/Users/joseph/opt/gradle-2.3/bin:/Users/joseph/opt/groovy-2.4.3/bin
 
-export PATH=${OPT_BINARIES}:/usr/local/Cellar/bison/3.0.2/bin:${PATH}:/Users/joseph/opt/vault-cli-2.4.40/bin:/usr/libexec:/usr/local/mysql/bin:/Users/khafaji/bin:/Users/joseph/opt/BookmarkerScript:~/bin:/Users/joseph/opt/gradle-1.12/bin:/Users/joseph/opt/jq/bin:/Users/joseph/opt/sonar-runner-2.4/bin
+export PATH=${OPT_BINARIES}:/usr/local/Cellar/bison/3.0.2/bin:${PATH}:/Users/joseph/opt/vault-cli-2.4.40/bin:/usr/libexec:/usr/local/mysql/bin:~/bin:/Users/joseph/opt/gradle-1.12/bin:/Users/joseph/opt/jq/bin:/Users/joseph/opt/sonar-runner-2.4/bin
 
 # Yokadi ToDo list
 export PATH=${PATH}:/Users/joseph/Projects/yokadi/bin
@@ -101,18 +97,6 @@ eval $(boot2docker shellinit 2> /dev/null)
 # ######################################################################################################################################################
 # ## 							                                    COMMON FUNCTIONS    	                 		            						##
 # ######################################################################################################################################################
-
-function mark()
-{
-	markme $*
-	. ~/.zshrc
-}
-
-function umark()
-{
-	umarkme $*
-	unset $*
-}
 
 function gitit
 {
