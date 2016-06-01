@@ -290,3 +290,8 @@ function push()
 {
   git push -u origin `br`
 }
+
+function jrdb()
+{
+  localMysql JustRideUniversal;
+}
