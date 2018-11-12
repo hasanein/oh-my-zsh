@@ -3,14 +3,20 @@
 # # 							                       SCRIPTS INCLUDE SECTION                 		            									 ##
 # #####################################################################################################################################################
 
+# Set the shell option to stop querying the user for (Y/N) when rm * something
+# TODO: This should probably be moved into somewhere more suitable as a shell custom settings
+setopt RM_STAR_SILENT
 
-# MASABI-RELATED CUSTOMIZATION SCRIPTS - HOT FOLDER
+eval $(thefuck --alias)
+
+# CLIENT-RELATED CUSTOMIZATION SCRIPTS - HOT DEPLOY FOLDER
 for file in $(ls ~/bin/shell_customization_scripts/*.sh)
 do
 	. ${file}
 done
 
 # re-start ssh agent if it's not running - needed to connect to masabi bastion servers
+# TODO: client-related, move it elsewhere
 eval $(ssh-agent) > /dev/null 2>&1
 ssh-add > /dev/null 2>&1
 
@@ -18,9 +24,13 @@ ssh-add > /dev/null 2>&1
 # ## 							                       PATH ENVIRONMENT VARIABLE SETUP                             								   	##
 # ######################################################################################################################################################
 
-OPT_BINARIES=/Users/joseph/opt/gradle-2.3/bin:/Users/joseph/opt/groovy-2.4.3/bin
+OPT_BINARIES=/Users/joseph/opt/gradle-2.3/bin:/Users/joseph/opt/groovy-2.4.3/bin:/Users/joseph/opt/bats/bin
 
-export PATH=${OPT_BINARIES}:/usr/local/Cellar/bison/3.0.2/bin:${PATH}:/Users/joseph/opt/vault-cli-2.4.40/bin:/usr/libexec:/usr/local/mysql/bin:~/bin:/Users/joseph/opt/gradle-1.12/bin:/Users/joseph/opt/jq/bin:/Users/joseph/opt/sonar-runner-2.4/bin
+export PATH=${OPT_BINARIES}:/usr/local/Cellar/bison/3.0.2/bin:${PATH}:/Users/joseph/opt/vault-cli-2.4.40/bin:/usr/libexec:/usr/local/mysql/bin:~/bin:/Users/joseph/opt/gradle-1.12/bin:/Users/joseph/opt/jq/bin:/Users/joseph/opt/sonar-runner-2.4/bin:/Users/joseph/opt/play-activator/activator-dist-1.3.10/bin
+
+# Latex binaries
+LATEXT_BINARIES=/usr/local/texlive/2018/bin/x86_64-darwin
+export PATH=${LATEXT_BINARIES}:${PATH}
 
 # Yokadi ToDo list
 export PATH=${PATH}:/Users/joseph/Projects/yokadi/bin
@@ -114,6 +124,11 @@ function scgrep()
 	do
 		grep -il $1 ${sourceCodeFile}
 	done | grep -v $1
+}
+
+function underscorify()
+{
+  echo $1 | sed 's/ /_/g'
 }
 
 function nkill()
@@ -265,21 +280,15 @@ function prCreatedAlert()
 
 function createPullRequest()
 {	
-    PULL_REQUEST_URL=$(stash pull-request ${1} ${2} @alexismusgrave)
+	CURRENT_BRANCH=$(git br | grep "^*" | cut -d " " -f2 | sed 's/ //g')
+    PULL_REQUEST_URL=$(stash pull-request ${CURRENT_BRANCH} develop @alexismusgrave @gerynagy @janenicholson @matthewfreake @luigigava)
     echo "PR Created: ${PULL_REQUEST_URL}"
     o ${PULL_REQUEST_URL}    
-
-    PR_TITLE=$3
-    prCreatedAlert "${PULL_REQUEST_URL}" "${PR_TITLE}"
 }
 
 function jsonLint()
 {
    echo "$1" | jq '.'
-}
-
-function brokerLogs(){
-	tail -f /var/hosting/tomcatlogs/justride_broker.log
 }
 
 function man-preview() {
@@ -294,4 +303,17 @@ function push()
 function jrdb()
 {
   localMysql JustRideUniversal;
+}
+
+function calc(){
+	echo "$1" | bc -l
+}
+
+function hackOn()
+{
+	git hack $(underscorify $1)
+}
+
+function redeploy(){	
+	rebuildSoleraApiDocker	
 }
